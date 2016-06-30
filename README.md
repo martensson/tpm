@@ -5,9 +5,7 @@ A CLI client to search and retrieve passwords from [TeamPasswordManager](http://
 ## Getting started
 
 - Install
-
-    go get github.com/martensson/tpm
+`go get github.com/martensson/tpm`
 
 * Use
-
-    tpm --help
+`tpm --help`
