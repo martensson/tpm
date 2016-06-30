@@ -70,7 +70,7 @@ func reqTpm(uri string) *http.Response {
 	time := strconv.FormatInt(time.Now().Unix(), 10)
 	unhash := uri + time
 	hash := hmac256(unhash, viper.GetString("privkey"))
-	req, err := http.NewRequest("GET", viper.GetString("base")+uri, nil)
+	req, err := http.NewRequest("GET", "https://"+viper.GetString("domain")+"/index.php/"+uri, nil)
 	req.Header.Add("X-Public-Key", viper.GetString("pubkey"))
 	req.Header.Add("X-Request-Hash", hash)
 	req.Header.Add("X-Request-Timestamp", time)

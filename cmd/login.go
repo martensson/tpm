@@ -25,27 +25,30 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // loginCmd represents the login command
 var loginCmd = &cobra.Command{
 	Use:   "login",
 	Short: "create login configuration",
-	Long:  "add your HMAC private/public keys and TPM base url",
+	Long:  "add your HMAC private/public keys and TPM domain",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Print("TPM base url (https://example.com/index.php/): ")
-		var base string
-		fmt.Scanln(&base)
+		fmt.Print("TPM domain (tpm.example.com): ")
+		var domain string
+		fmt.Scanln(&domain)
+		config["domain"] = domain
+		viper.Set("domain", domain)
 		fmt.Print("HMAC public key: ")
 		var pubkey string
 		fmt.Scanln(&pubkey)
+		config["pubkey"] = pubkey
+		viper.Set("pubkey", pubkey)
 		fmt.Print("HMAC private key: ")
 		var privkey string
 		fmt.Scanln(&privkey)
-		// TODO: Check that it actually works here.
-		config["base"] = base
-		config["pubkey"] = pubkey
 		config["privkey"] = privkey
+		viper.Set("privkey", privkey)
 		resp := reqTpm("api/v4/version.json")
 		defer resp.Body.Close()
 		//body, err := ioutil.ReadAll(resp.Body)
