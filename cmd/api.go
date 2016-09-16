@@ -37,19 +37,32 @@ import (
 	"github.com/spf13/viper"
 )
 
+type PasswordList []struct {
+	Name string `json:"name,omitempty" yaml:"name,omitempty"`
+	ID   int    `json:"id,omitempty" yaml:"id,omitempty"`
+}
+
 type Password struct {
 	ID           int    `json:"id,omitempty" yaml:"id,omitempty"`
 	Name         string `json:"name,omitempty" yaml:"name,omitempty"`
-	NotesSnippet string `json:"notes_snippet,omitempty" yaml:"notes_snippet,omitempty"`
-	Tags         string `json:"tags,omitempty" yaml:"tags,omitempty"`
-	AccessInfo   string `json:"access_info,omitempty" yaml:"access_info,omitempty"`
 	Username     string `json:"username,omitempty" yaml:"username,omitempty"`
-	Email        string `json:"email,omitempty" yaml:"email,omitempty"`
 	Password     string `json:"password,omitempty" yaml:"password,omitempty"`
+	AccessInfo   string `json:"access_info,omitempty" yaml:"access_info,omitempty"`
+	Email        string `json:"email,omitempty" yaml:"email,omitempty"`
 	Notes        string `json:"notes,omitempty" yaml:"notes,omitempty"`
+	NotesSnippet string `json:"notes_snippet,omitempty" yaml:"notes_snippet,omitempty"`
 	UpdatedOn    string `json:"updated_on,omitempty" yaml:"updated_on,omitempty"`
-	CreatedOn    string `json:"created_on,omitempty" yaml:"created_on,omitempty"`
-	Project      struct {
+	UpdatedBy    struct {
+		ID   int    `json:"id"`
+		Name string `json:"name"`
+	} `json:"updated_by"`
+	CreatedOn string `json:"created_on,omitempty" yaml:"created_on,omitempty"`
+	CreatedBy struct {
+		ID   int    `json:"id"`
+		Name string `json:"name"`
+	} `json:"created_by"`
+	Tags    string `json:"tags,omitempty" yaml:"tags,omitempty"`
+	Project struct {
 		Name string `json:"name,omitempty" yaml:"name,omitempty"`
 	} `json:"project,omitempty" yaml:"project,omitempty"`
 }

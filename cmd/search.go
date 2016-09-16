@@ -26,9 +26,9 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strconv"
 
-	"gopkg.in/yaml.v2"
-
+	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
 )
 
@@ -49,13 +49,26 @@ var searchCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		var passwords []Password
+		var passwords PasswordList
 		err = json.Unmarshal(body, &passwords)
 		if err != nil {
 			log.Fatal(err)
 		}
-		yamlpass, _ := yaml.Marshal(&passwords)
-		fmt.Printf(string(yamlpass))
+		if len(passwords) == 0 {
+			fmt.Println("No passwords found.")
+		} else if len(passwords) == 1 {
+			showCmd.Run(nil, []string{strconv.Itoa(passwords[0].ID)})
+		} else {
+			table := tablewriter.NewWriter(os.Stdout)
+			table.SetHeader([]string{"ID", "Name"})
+			table.SetBorders(tablewriter.Border{Left: false, Top: false, Right: false, Bottom: false})
+			table.SetColWidth(100)
+			for _, password := range passwords {
+				table.Append([]string{strconv.Itoa(password.ID), password.Name})
+				//fmt.Printf("%d: %s\n", password.ID, password.Name)
+			}
+			table.Render()
+		}
 	},
 }
 
