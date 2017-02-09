@@ -19,3 +19,7 @@ Search passwords:
 Show password by ID:
 
     tpm show 100
+
+Create password:
+
+    tpm create amazon.com --username joe --password abc123 --project 10 --email joe@test.com --tags amazon,aws,shopping

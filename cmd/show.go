@@ -34,16 +34,16 @@ import (
 
 // showCmd represents the show command
 var showCmd = &cobra.Command{
-	Use:   "show",
+	Use:   "show [id]",
 	Short: "show password of id",
 	Long:  "This command returns the data of a password, identified by its internal id.",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 1 {
-			fmt.Println("add a query id")
-			os.Exit(0)
+			fmt.Println("id argument is required.")
+			os.Exit(1)
 		}
 		uri := "api/v4/passwords/" + args[0] + ".json"
-		resp := reqTpm(uri)
+		resp := getTpm(uri)
 		body, err := ioutil.ReadAll(resp.Body)
 		resp.Body.Close()
 		if err != nil {

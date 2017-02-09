@@ -21,6 +21,7 @@
 package cmd
 
 import (
+	"bytes"
 	"crypto/hmac"
 	"crypto/sha256"
 	"crypto/tls"
@@ -64,6 +65,7 @@ type Password struct {
 	Tags    string `json:"tags,omitempty" yaml:"tags,omitempty"`
 	Project struct {
 		Name string `json:"name,omitempty" yaml:"name,omitempty"`
+		ID   int    `json:"id,omitempty" yaml:"id,omitempty"`
 	} `json:"project,omitempty" yaml:"project,omitempty"`
 }
 
@@ -76,7 +78,7 @@ func hmac256(message string, secret string) string {
 	return hex.EncodeToString(h.Sum(nil))
 }
 
-func reqTpm(uri string) *http.Response {
+func getTpm(uri string) *http.Response {
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
@@ -84,6 +86,26 @@ func reqTpm(uri string) *http.Response {
 	unhash := uri + time
 	hash := hmac256(unhash, viper.GetString("privkey"))
 	req, err := http.NewRequest("GET", "https://"+viper.GetString("domain")+"/index.php/"+uri, nil)
+	req.Header.Add("X-Public-Key", viper.GetString("pubkey"))
+	req.Header.Add("X-Request-Hash", hash)
+	req.Header.Add("X-Request-Timestamp", time)
+	req.Header.Add("Content-Type", "application/json; charset=utf-8")
+	client := &http.Client{Transport: tr}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return resp
+}
+
+func postTpm(uri string, payload []byte) *http.Response {
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	time := strconv.FormatInt(time.Now().Unix(), 10)
+	unhash := uri + time + string(payload)
+	hash := hmac256(unhash, viper.GetString("privkey"))
+	req, err := http.NewRequest("POST", "https://"+viper.GetString("domain")+"/index.php/"+uri, bytes.NewBuffer(payload))
 	req.Header.Add("X-Public-Key", viper.GetString("pubkey"))
 	req.Header.Add("X-Request-Hash", hash)
 	req.Header.Add("X-Request-Timestamp", time)

@@ -34,16 +34,16 @@ import (
 
 // searchCmd represents the search command
 var searchCmd = &cobra.Command{
-	Use:   "search",
+	Use:   "search [query]",
 	Short: "return list of matching passwords.",
 	Long:  "The returned data is the same as in the passwords searchs (all active, archived, favorite and search) in the web interface.",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 1 {
-			fmt.Println("add a query string")
-			os.Exit(0)
+			fmt.Println("query argument is required.")
+			os.Exit(1)
 		}
 		uri := "api/v4/passwords/search/" + args[0] + ".json"
-		resp := reqTpm(uri)
+		resp := getTpm(uri)
 		body, err := ioutil.ReadAll(resp.Body)
 		resp.Body.Close()
 		if err != nil {
@@ -62,6 +62,9 @@ var searchCmd = &cobra.Command{
 			table := tablewriter.NewWriter(os.Stdout)
 			table.SetHeader([]string{"ID", "Name"})
 			table.SetBorders(tablewriter.Border{Left: false, Top: false, Right: false, Bottom: false})
+			table.SetCenterSeparator("")
+			table.SetRowSeparator("-")
+			table.SetColumnSeparator("")
 			table.SetColWidth(100)
 			for _, password := range passwords {
 				table.Append([]string{strconv.Itoa(password.ID), password.Name})

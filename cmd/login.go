@@ -49,7 +49,7 @@ var loginCmd = &cobra.Command{
 		fmt.Scanln(&privkey)
 		config["privkey"] = privkey
 		viper.Set("privkey", privkey)
-		resp := reqTpm("api/v4/version.json")
+		resp := getTpm("api/v4/version.json")
 		defer resp.Body.Close()
 		//body, err := ioutil.ReadAll(resp.Body)
 		//if err != nil {
