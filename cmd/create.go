@@ -42,11 +42,12 @@ var (
 // createCmd represents the create command
 var createCmd = &cobra.Command{
 	Use:   "create [name]",
-	Short: "create a new password",
-	Long:  "Adds a new password to the tpm",
+	Short: "Create a new password.",
+	Long:  "Adds a new password to tpm.",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 1 {
-			fmt.Println("password name argument is required.")
+			fmt.Printf("%s\n\n", cmd.Short)
+			fmt.Println(cmd.UsageString())
 			os.Exit(1)
 		} else {
 			name = args[0]

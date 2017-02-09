@@ -35,11 +35,12 @@ import (
 // searchCmd represents the search command
 var searchCmd = &cobra.Command{
 	Use:   "search [query]",
-	Short: "return list of matching passwords.",
+	Short: "Search for matching passwords.",
 	Long:  "The returned data is the same as in the passwords searchs (all active, archived, favorite and search) in the web interface.",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 1 {
-			fmt.Println("query argument is required.")
+			fmt.Printf("%s\n\n", cmd.Short)
+			fmt.Println(cmd.UsageString())
 			os.Exit(1)
 		}
 		uri := "api/v4/passwords/search/" + args[0] + ".json"
