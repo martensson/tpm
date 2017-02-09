@@ -34,7 +34,7 @@ var cfgFile string
 var RootCmd = &cobra.Command{
 	Use:   "tpm",
 	Short: "TPM Command-line interface",
-	Long:  "Team Password Manager CLI tool to easily access your passwords.",
+	Long:  "Team Password Manager CLI tool to easily manage your passwords.",
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.
