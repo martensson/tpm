@@ -15,13 +15,11 @@ A CLI client to search and manage passwords from [TeamPasswordManager](http://te
 
 ## Installation
 
-Download latest tag [release](https://github.com/martensson/tpm/releases).
+1. Install pre-compiled binary from [releases](https://github.com/martensson/tpm/releases).
 
-### From source
+2. Install from source: `go get github.com/martensson/tpm`
 
-If you you prefer to compile it yourself:
-
-    go get github.com/martensson/tpm
+It's that easy!
 
 ### Using tpm
 
