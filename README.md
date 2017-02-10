@@ -1,12 +1,25 @@
 # tpm
 
-A CLI client to search and retrieve passwords from [TeamPasswordManager](http://teampasswordmanager.com/).
+A CLI client to search and manage passwords from [TeamPasswordManager](http://teampasswordmanager.com/).
+
+**Features:**
+
+* Search and show passwords inside TeamPasswordManager.
+* Support to add new passwords easily.
+* Supports HMAC for improved API security.
+* Single binary with no other dependencies.
+
+## Compability
+
+* TeamPasswordManager API v4
 
 ## Getting started
 
-Install running:
+Install from source running:
 
     go get github.com/martensson/tpm
+
+### Using tpm
 
 Login using HMAC-key:
 
