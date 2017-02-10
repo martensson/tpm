@@ -1,4 +1,4 @@
-# tpm
+# tpm [![Build Status](https://travis-ci.org/martensson/tpm.svg?branch=master)](https://travis-ci.org/martensson/tpm)
 
 A CLI client to search and manage passwords from [TeamPasswordManager](http://teampasswordmanager.com/).
 
@@ -13,9 +13,13 @@ A CLI client to search and manage passwords from [TeamPasswordManager](http://te
 
 * TeamPasswordManager API v4
 
-## Getting started
+## Installation
 
-Install from source running:
+Download latest tag [release](https://github.com/martensson/tpm/releases).
+
+### From source
+
+If you you prefer to compile it yourself:
 
     go get github.com/martensson/tpm
 
