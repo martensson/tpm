@@ -36,7 +36,7 @@ import (
 var searchCmd = &cobra.Command{
 	Use:   "search [query]",
 	Short: "Search for matching passwords.",
-	Long:  "The returned data is the same as in the passwords searchs (all active, archived, favorite and search) in the web interface.",
+	Long:  "The returned data is the same as in the passwords lists (all active, archived, favorite and search) in the web interface.",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 1 {
 			fmt.Printf("%s\n\n", cmd.Short)

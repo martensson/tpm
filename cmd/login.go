@@ -31,8 +31,8 @@ import (
 // loginCmd represents the login command
 var loginCmd = &cobra.Command{
 	Use:   "login",
-	Short: "create login configuration",
-	Long:  "add your HMAC private/public keys and TPM domain",
+	Short: "Create login configuration",
+	Long:  "Add your HMAC private/public keys and TPM domain",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Print("TPM domain (tpm.example.com): ")
 		var domain string
