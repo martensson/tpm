@@ -63,7 +63,7 @@ var createCmd = &cobra.Command{
 			fmt.Println("flag --password not provided, aborting.")
 			os.Exit(1)
 		}
-		if newpassword.ProjectID == -1 {
+		if newpassword.ProjectID == 0 {
 			fmt.Println("flag --project not provided, aborting.")
 			os.Exit(1)
 		}
@@ -93,7 +93,7 @@ func init() {
 	RootCmd.AddCommand(createCmd)
 	createCmd.Flags().StringVarP(&newpassword.Username, "username", "u", "", "username (required)")
 	createCmd.Flags().StringVarP(&newpassword.Password, "password", "p", "", "password (required)")
-	createCmd.Flags().IntVarP(&newpassword.ProjectID, "project", "i", -1, "project_id (required)")
+	createCmd.Flags().IntVarP(&newpassword.ProjectID, "project", "i", 0, "project_id (required)")
 	createCmd.Flags().StringVarP(&newpassword.Email, "email", "e", "", "e-mail")
 	createCmd.Flags().StringVarP(&newpassword.Tags, "tags", "t", "", "tags (list of comma separated strings)")
 	createCmd.Flags().StringVarP(&newpassword.Notes, "notes", "n", "", "notes")
