@@ -30,14 +30,17 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	name      string
-	username  string
-	password  string
-	projectID string
-	email     string
-	tags      string
-)
+type Newpassword struct {
+	Name      string `json:"name"`
+	Username  string `json:"username"`
+	Password  string `json:"password"`
+	ProjectID int    `json:"project_id"`
+	Email     string `json:"email"`
+	Tags      string `json:"tags"`
+	Notes     string `json:"notes"`
+}
+
+var newpassword Newpassword
 
 // createCmd represents the create command
 var createCmd = &cobra.Command{
@@ -50,22 +53,22 @@ var createCmd = &cobra.Command{
 			fmt.Println(cmd.UsageString())
 			os.Exit(1)
 		} else {
-			name = args[0]
+			newpassword.Name = args[0]
 		}
-		if username == "" {
+		if newpassword.Username == "" {
 			fmt.Println("flag --username not provided, aborting.")
 			os.Exit(1)
 		}
-		if password == "" {
+		if newpassword.Password == "" {
 			fmt.Println("flag --password not provided, aborting.")
 			os.Exit(1)
 		}
-		if projectID == "" {
+		if newpassword.ProjectID == -1 {
 			fmt.Println("flag --project not provided, aborting.")
 			os.Exit(1)
 		}
 		uri := "api/v4/passwords.json"
-		var payload = []byte(`{"name":"` + name + `","project_id":` + projectID + `,"username":"` + username + `","password":"` + password + `","email":"` + email + `","tags":"` + tags + `"}`)
+		payload, _ := json.Marshal(newpassword)
 		resp := postTpm(uri, payload)
 		body, err := ioutil.ReadAll(resp.Body)
 		resp.Body.Close()
@@ -88,9 +91,10 @@ var createCmd = &cobra.Command{
 
 func init() {
 	RootCmd.AddCommand(createCmd)
-	createCmd.Flags().StringVarP(&username, "username", "u", "", "username (required)")
-	createCmd.Flags().StringVarP(&password, "password", "p", "", "password (required)")
-	createCmd.Flags().StringVarP(&projectID, "project", "i", "", "project_id (required)")
-	createCmd.Flags().StringVarP(&email, "email", "e", "", "e-mail")
-	createCmd.Flags().StringVarP(&tags, "tags", "t", "", "tags (list of comma separated strings)")
+	createCmd.Flags().StringVarP(&newpassword.Username, "username", "u", "", "username (required)")
+	createCmd.Flags().StringVarP(&newpassword.Password, "password", "p", "", "password (required)")
+	createCmd.Flags().IntVarP(&newpassword.ProjectID, "project", "i", -1, "project_id (required)")
+	createCmd.Flags().StringVarP(&newpassword.Email, "email", "e", "", "e-mail")
+	createCmd.Flags().StringVarP(&newpassword.Tags, "tags", "t", "", "tags (list of comma separated strings)")
+	createCmd.Flags().StringVarP(&newpassword.Notes, "notes", "n", "", "notes")
 }
