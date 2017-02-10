@@ -1,10 +1,10 @@
 # tpm [![Build Status](https://travis-ci.org/martensson/tpm.svg?branch=master)](https://travis-ci.org/martensson/tpm)
 
-A CLI client to search and manage passwords from [TeamPasswordManager](http://teampasswordmanager.com/).
+A CLI client to search and manage passwords inside [TeamPasswordManager](http://teampasswordmanager.com/).
 
 **Features:**
 
-* Search and show passwords inside TeamPasswordManager.
+* Search and show passwords.
 * Support to add new passwords easily.
 * Supports HMAC for improved API security.
 * Single binary with no other dependencies.
@@ -29,7 +29,7 @@ Login using HMAC-key:
 
 Search passwords:
 
-    tpm search foobar
+    tpm search aws.amazon.com
 
 Show password by ID:
 
@@ -37,4 +37,4 @@ Show password by ID:
 
 Create password:
 
-    tpm create amazon.com --username joe --password abc123 --project 10 --email joe@test.com --tags amazon,aws,shopping
+    tpm create aws.amazon.com --username joe --password abc123 --project 10 --email joe@test.com --tags amazon,aws,shopping
