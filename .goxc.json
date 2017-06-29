@@ -4,8 +4,8 @@
 		"go-install"
 	],
 	"Arch": "amd64",
-	"Os": "linux,windows",
-	"PackageVersion": "0.2.1",
+	"Os": "linux,windows,darwin",
+	"PackageVersion": "0.2.2",
 	"TaskSettings": {
 		"publish-github": {
 			"owner": "martensson",
