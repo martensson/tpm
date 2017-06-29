@@ -6,6 +6,7 @@ A CLI client to search and manage passwords inside [TeamPasswordManager](http://
 
 * Search and show passwords.
 * Support to add new passwords easily.
+* Supports update and delete of passwords.
 * Supports HMAC for improved API security.
 * Single binary with no other dependencies.
 
@@ -35,6 +36,14 @@ Show password by ID:
 
     tpm show 100
 
+Show password by ID (json output):
+
+    tpm show 100 -o json
+
 Create password:
 
     tpm create aws.amazon.com --username joe --password abc123 --project 10 --email joe@test.com --tags amazon,aws,shopping
+
+Update password:
+
+    tpm update 100 --password abc123 --access http://aws.amazon.com
