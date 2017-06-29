@@ -1,2 +1,3 @@
 tpm
 dist*
+.goxc.local.json
