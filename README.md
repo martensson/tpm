@@ -47,3 +47,7 @@ Create password:
 Update password:
 
     tpm update 100 --password abc123 --access http://aws.amazon.com
+
+Delete password:
+
+    tpm delete 100
