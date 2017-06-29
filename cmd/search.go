@@ -28,7 +28,8 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/olekukonko/tablewriter"
+	yaml "gopkg.in/yaml.v2"
+
 	"github.com/spf13/cobra"
 )
 
@@ -60,22 +61,18 @@ var searchCmd = &cobra.Command{
 		} else if len(passwords) == 1 {
 			showCmd.Run(nil, []string{strconv.Itoa(passwords[0].ID)})
 		} else {
-			table := tablewriter.NewWriter(os.Stdout)
-			table.SetHeader([]string{"ID", "Name"})
-			table.SetBorders(tablewriter.Border{Left: false, Top: false, Right: false, Bottom: false})
-			table.SetCenterSeparator("")
-			table.SetRowSeparator("-")
-			table.SetColumnSeparator("")
-			table.SetColWidth(100)
-			for _, password := range passwords {
-				table.Append([]string{strconv.Itoa(password.ID), password.Name})
-				//fmt.Printf("%d: %s\n", password.ID, password.Name)
+			if outputFormat == "json" {
+				jsonpass, _ := json.MarshalIndent(&passwords, "", "  ")
+				fmt.Printf(string(jsonpass))
+			} else {
+				yamlpass, _ := yaml.Marshal(&passwords)
+				fmt.Printf(string(yamlpass))
 			}
-			table.Render()
 		}
 	},
 }
 
 func init() {
 	RootCmd.AddCommand(searchCmd)
+	searchCmd.Flags().StringVarP(&outputFormat, "output", "o", "yaml", "Output format: json|yaml")
 }

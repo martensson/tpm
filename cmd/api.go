@@ -69,6 +69,21 @@ type Password struct {
 	} `json:"project,omitempty" yaml:"project,omitempty"`
 }
 
+type Newpassword struct {
+	Name       string `json:"name,omitempty"`
+	Username   string `json:"username,omitempty"`
+	Password   string `json:"password,omitempty"`
+	ProjectID  int    `json:"project_id,omitempty"`
+	Email      string `json:"email,omitempty"`
+	Tags       string `json:"tags,omitempty"`
+	Notes      string `json:"notes,omitempty"`
+	AccessInfo string `json:"access_info,omitempty"`
+	ExpiryDate string `json:"expiry_date,omitempty"`
+}
+
+var newpassword Newpassword
+var outputFormat string
+
 var config = make(map[string]string)
 
 func hmac256(message string, secret string) string {
@@ -106,6 +121,46 @@ func postTpm(uri string, payload []byte) *http.Response {
 	unhash := uri + time + string(payload)
 	hash := hmac256(unhash, viper.GetString("privkey"))
 	req, err := http.NewRequest("POST", "https://"+viper.GetString("domain")+"/index.php/"+uri, bytes.NewBuffer(payload))
+	req.Header.Add("X-Public-Key", viper.GetString("pubkey"))
+	req.Header.Add("X-Request-Hash", hash)
+	req.Header.Add("X-Request-Timestamp", time)
+	req.Header.Add("Content-Type", "application/json; charset=utf-8")
+	client := &http.Client{Transport: tr}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return resp
+}
+
+func putTpm(uri string, payload []byte) *http.Response {
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	time := strconv.FormatInt(time.Now().Unix(), 10)
+	unhash := uri + time + string(payload)
+	hash := hmac256(unhash, viper.GetString("privkey"))
+	req, err := http.NewRequest("PUT", "https://"+viper.GetString("domain")+"/index.php/"+uri, bytes.NewBuffer(payload))
+	req.Header.Add("X-Public-Key", viper.GetString("pubkey"))
+	req.Header.Add("X-Request-Hash", hash)
+	req.Header.Add("X-Request-Timestamp", time)
+	req.Header.Add("Content-Type", "application/json; charset=utf-8")
+	client := &http.Client{Transport: tr}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return resp
+}
+
+func deleteTpm(uri string) *http.Response {
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	time := strconv.FormatInt(time.Now().Unix(), 10)
+	unhash := uri + time
+	hash := hmac256(unhash, viper.GetString("privkey"))
+	req, err := http.NewRequest("DELETE", "https://"+viper.GetString("domain")+"/index.php/"+uri, nil)
 	req.Header.Add("X-Public-Key", viper.GetString("pubkey"))
 	req.Header.Add("X-Request-Hash", hash)
 	req.Header.Add("X-Request-Timestamp", time)

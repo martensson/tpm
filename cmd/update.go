@@ -30,47 +30,33 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// createCmd represents the create command
-var createCmd = &cobra.Command{
-	Use:   "create [name]",
-	Short: "Create a new password.",
-	Long:  "Adds a new password to tpm.",
+// updateCmd represents the update command
+var updateCmd = &cobra.Command{
+	Use:   "update [id]",
+	Short: "Update password with id.",
+	Long:  "Only the fields that are included are updated, the other fields are left unchanged.",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 1 {
 			fmt.Printf("%s\n\n", cmd.Short)
 			fmt.Println(cmd.UsageString())
 			os.Exit(1)
-		} else {
-			newpassword.Name = args[0]
 		}
-		if newpassword.Username == "" {
-			fmt.Println("flag --username not provided, aborting.")
-			os.Exit(1)
-		}
-		if newpassword.Password == "" {
-			fmt.Println("flag --password not provided, aborting.")
-			os.Exit(1)
-		}
-		if newpassword.ProjectID == 0 {
-			fmt.Println("flag --project not provided, aborting.")
-			os.Exit(1)
-		}
-		uri := "api/v4/passwords.json"
+		uri := "api/v4/passwords/" + args[0] + ".json"
 		payload, _ := json.Marshal(newpassword)
-		resp := postTpm(uri, payload)
+		resp := putTpm(uri, payload)
 		body, err := ioutil.ReadAll(resp.Body)
 		resp.Body.Close()
 		if err != nil {
 			log.Fatal(err)
 		}
-		var status map[string]interface{}
-		err = json.Unmarshal(body, &status)
-		if err != nil {
-			log.Fatal(err)
-		}
-		if resp.StatusCode == 201 {
-			fmt.Printf("Password created with id: %s\n", status["id"].(string))
+		if resp.StatusCode == 204 {
+			fmt.Printf("Password updated successfully")
 		} else {
+			var status map[string]interface{}
+			err = json.Unmarshal(body, &status)
+			if err != nil {
+				log.Fatal(err)
+			}
 			fmt.Println(status["message"].(string))
 			os.Exit(1)
 		}
@@ -78,13 +64,13 @@ var createCmd = &cobra.Command{
 }
 
 func init() {
-	RootCmd.AddCommand(createCmd)
-	createCmd.Flags().StringVarP(&newpassword.Username, "username", "u", "", "username (required)")
-	createCmd.Flags().StringVarP(&newpassword.Password, "password", "p", "", "password (required)")
-	createCmd.Flags().IntVarP(&newpassword.ProjectID, "project", "i", 0, "project_id (required)")
-	createCmd.Flags().StringVarP(&newpassword.Email, "email", "e", "", "e-mail")
-	createCmd.Flags().StringVarP(&newpassword.Tags, "tags", "t", "", "tags (list of comma separated strings)")
-	createCmd.Flags().StringVarP(&newpassword.Notes, "notes", "n", "", "notes")
-	createCmd.Flags().StringVarP(&newpassword.AccessInfo, "access", "a", "", "access info (url)")
-	createCmd.Flags().StringVarP(&newpassword.ExpiryDate, "expiry", "", "", "in ISO 8601 format: yyyy-mm-dd")
+	RootCmd.AddCommand(updateCmd)
+	updateCmd.Flags().StringVarP(&newpassword.Name, "name", "", "", "name")
+	updateCmd.Flags().StringVarP(&newpassword.Username, "username", "u", "", "username")
+	updateCmd.Flags().StringVarP(&newpassword.Password, "password", "p", "", "password")
+	updateCmd.Flags().StringVarP(&newpassword.Email, "email", "e", "", "e-mail")
+	updateCmd.Flags().StringVarP(&newpassword.Tags, "tags", "t", "", "tags (list of comma separated strings)")
+	updateCmd.Flags().StringVarP(&newpassword.Notes, "notes", "n", "", "notes")
+	updateCmd.Flags().StringVarP(&newpassword.AccessInfo, "access", "a", "", "access info (url)")
+	updateCmd.Flags().StringVarP(&newpassword.ExpiryDate, "expiry", "", "", "in ISO 8601 format: yyyy-mm-dd")
 }

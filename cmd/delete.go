@@ -1,4 +1,4 @@
-// Copyright © 2016 Benjamin Martensson <benjamin.martensson@nrk.no>
+// Copyright © 2017 Benjamin Martensson <benjamin.martensson@nrk.no>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -27,16 +27,14 @@ import (
 	"log"
 	"os"
 
-	"gopkg.in/yaml.v2"
-
 	"github.com/spf13/cobra"
 )
 
-// showCmd represents the show command
-var showCmd = &cobra.Command{
-	Use:   "show [id]",
-	Short: "Show password with id.",
-	Long:  "This command returns the data of a password, identified by its internal id.",
+// deleteCmd represents the delete command
+var deleteCmd = &cobra.Command{
+	Use:   "delete [id]",
+	Short: "Delete password with id",
+	Long:  "This deletes the password, its files, etc.",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 1 {
 			fmt.Printf("%s\n\n", cmd.Short)
@@ -44,25 +42,14 @@ var showCmd = &cobra.Command{
 			os.Exit(1)
 		}
 		uri := "api/v4/passwords/" + args[0] + ".json"
-		resp := getTpm(uri)
+		resp := deleteTpm(uri)
 		body, err := ioutil.ReadAll(resp.Body)
 		resp.Body.Close()
 		if err != nil {
 			log.Fatal(err)
 		}
-		if resp.StatusCode == 200 {
-			var passwords Password
-			err = json.Unmarshal(body, &passwords)
-			if err != nil {
-				log.Fatal(err)
-			}
-			if outputFormat == "json" {
-				jsonpass, _ := json.MarshalIndent(&passwords, "", "  ")
-				fmt.Printf(string(jsonpass))
-			} else {
-				yamlpass, _ := yaml.Marshal(&passwords)
-				fmt.Printf(string(yamlpass))
-			}
+		if resp.StatusCode == 204 {
+			fmt.Printf("Password deleted successfully")
 		} else {
 			var status map[string]interface{}
 			err = json.Unmarshal(body, &status)
@@ -76,6 +63,5 @@ var showCmd = &cobra.Command{
 }
 
 func init() {
-	RootCmd.AddCommand(showCmd)
-	showCmd.Flags().StringVarP(&outputFormat, "output", "o", "yaml", "Output format: json|yaml")
+	RootCmd.AddCommand(deleteCmd)
 }
