@@ -18,7 +18,9 @@ A CLI client to search and manage passwords inside [TeamPasswordManager](http://
 
 1. Install pre-compiled binary from [releases](https://github.com/martensson/tpm/releases).
 
-2. Install from source: `go get github.com/martensson/tpm`
+2. Install via Homebrew: `brew install martensson/tpm/tpm`
+
+3. Install from source: `go get github.com/martensson/tpm`
 
 It's that easy!
 

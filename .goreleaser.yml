@@ -11,3 +11,13 @@ archive:
   format: tar.gz
   files:
     - LICENSE
+  format_overrides:
+    - goos: windows
+      format: zip
+brew:
+  github:
+    owner: martensson
+    name: tpm-tap
+  folder: Formula
+  homepage: "https://github.com/martensson/tpm"
+  description: "A CLI client to search and manage passwords inside TeamPasswordManager."
