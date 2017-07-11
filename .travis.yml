@@ -1,10 +1,5 @@
 language: go
 go:
-  - 1.7
-before_install:
-  - go get github.com/mitchellh/gox
-  - go get github.com/tcnksm/ghr
-  - go get github.com/inconshreveable/mousetrap
+  - 1.8
 after_success:
-  - gox -output "dist/{{.OS}}_{{.Arch}}_{{.Dir}}"
-  - ghr --username martensson --token $GITHUB_TOKEN --replace --debug $TRAVIS_TAG dist/
+  - test -n "$TRAVIS_TAG" && curl -sL https://git.io/goreleaser | bash

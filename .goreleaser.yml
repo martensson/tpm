@@ -6,6 +6,7 @@ builds:
       - linux
     goarch:
       - amd64
+    ldflags: -s -w -X github.com/martensson/tpm/cmd.version={{.Version}} -X github.com/martensson/tpm/cmd.commit={{.Commit}} -X github.com/martensson/tpm/cmd.date={{.Date}}
 # Archive customization
 archive:
   format: tar.gz
